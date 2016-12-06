@@ -2,9 +2,12 @@ package com.cymaybe.foucsurfaceview;
 
 import android.content.Context;
 import android.content.res.TypedArray;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Path;
+import android.graphics.Point;
 import android.graphics.PointF;
 import android.graphics.RectF;
 import android.graphics.drawable.Drawable;
@@ -1253,6 +1256,43 @@ public class FocusSurfaceView extends SurfaceView {
      */
     public RectF getFrameRect() {
         return mFrameRect;
+    }
+
+    /**
+     * 获取照片
+     *
+     * @param data        从camera返回的数据
+     * @param pictureSize 原始照片的大小
+     * @return
+     */
+    public Bitmap getPicture(byte[] data, Point pictureSize) {
+        //设置原始照片
+        Bitmap bitmap = BitmapFactory.decodeByteArray(data, 0, data.length);
+        //裁剪框的位置和宽高
+        RectF frameRect = getFrameRect();
+        float frameLeft = frameRect.left;
+        float frameTop = frameRect.top;
+        float frameWidth = frameRect.width();
+        float frameHeight = frameRect.height();
+
+        //照片的宽高
+        float picWidth = pictureSize.x;
+        float picHeight = pictureSize.y;
+
+        //预览界面的宽高
+        float preWidth = getWidth();
+        float preHeight = getHeight();
+
+        //预览界面和照片的比例
+        float preRW = picWidth / preWidth;
+        float preRH = picHeight / preHeight;
+
+        int cropLeft = (int) (frameLeft * preRW);
+        int cropTop = (int) (frameTop * preRH);
+        int cropWidth = (int) (frameWidth * preRW);
+        int cropHeight = (int) (frameHeight * preRH);
+
+        return Bitmap.createBitmap(bitmap, cropLeft, cropTop, cropWidth, cropHeight);
     }
 
     private int dip2px(Context context, float dipValue) {
