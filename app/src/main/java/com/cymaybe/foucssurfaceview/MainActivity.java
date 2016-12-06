@@ -1,9 +1,9 @@
 package com.cymaybe.foucssurfaceview;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.RectF;
+import android.graphics.Point;
 import android.hardware.Camera;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -179,44 +179,17 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     }, null, null, new Camera.PictureCallback() {
                         @Override
                         public void onPictureTaken(byte[] data, Camera camera) {
-                            savePicture(data);
+                            Camera.Size picSize = mCamera.getParameters().getPictureSize();
+                            Point pic = new Point(picSize.width, picSize.height);
+                            Bitmap bitmap = previewSFV.getPicture(data, pic);
+                            Intent intent = new Intent(MainActivity.this, PreviewPictureActivity.class);
+                            intent.putExtra(TAKE_PICTURE, bitmap);
+                            startActivity(intent);
                         }
                     });
                 }
             }
         });
-    }
-
-    private void savePicture(byte[] data) {
-        //设置原始照片
-        Bitmap bitmap = BitmapFactory.decodeByteArray(data, 0, data.length);
-
-        //裁剪框的位置和宽高
-        RectF frameRect = previewSFV.getFrameRect();
-        float frameLeft = frameRect.left;
-        float frameTop = frameRect.top;
-        float frameWidth = frameRect.width();
-        float frameHeight = frameRect.height();
-
-        //照片的宽高
-        Camera.Size picSize = mCamera.getParameters().getPictureSize();
-        float picWidth = picSize.width;
-        float picHeight = picSize.height;
-
-        //预览界面的宽高
-        float preWidth = previewSFV.getWidth();
-        float preHeight = previewSFV.getHeight();
-
-        //预览界面和照片的比例
-        float preRW = picWidth / preWidth;
-        float preRH = picHeight / preHeight;
-
-        int cropLeft = (int) (frameLeft * preRW);
-        int cropTop = (int) (frameTop * preRH);
-        int cropWidth = (int) (frameWidth * preRW);
-        int cropHeight = (int) (frameHeight * preRH);
-
-        Bitmap cropBmp = Bitmap.createBitmap(bitmap, cropLeft, cropTop, cropWidth, cropHeight);
     }
 
     /**
