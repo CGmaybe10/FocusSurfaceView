@@ -1,18 +1,37 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
-    android:id="@+id/activity_main"
+<FrameLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:paddingBottom="@dimen/activity_vertical_margin"
-    android:paddingLeft="@dimen/activity_horizontal_margin"
-    android:paddingRight="@dimen/activity_horizontal_margin"
-    android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context="com.cymaybe.foucssurfaceview.MainActivity">
+    android:layout_height="match_parent">
 
-    <TextView
+    <com.cymaybe.foucsurfaceview.FocusSurfaceView
+        android:id="@+id/preview_sv"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@android:color/transparent"
+        android:visibility="visible"
+        app:focus_crop_height="300dp"
+        app:focus_crop_width="225dp"
+        app:focus_frame_color="@android:color/holo_green_dark"
+        app:focus_frame_stroke_weight="1dp"
+        app:focus_guide_color="@android:color/holo_green_dark"
+        app:focus_guide_show_mode="not_show"
+        app:focus_guide_stroke_weight="1dp"
+        app:focus_handle_color="@android:color/holo_green_dark"
+        app:focus_handle_show_mode="not_show"
+        app:focus_handle_size="14dp"
+        app:focus_min_frame_size="50dp"
+        app:focus_mode="ratio_3_4"
+        app:focus_overlay_color="#33000000"
+        app:focus_touch_padding="8dp"/>
+
+    <Button
+        android:id="@+id/take_bt"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Hello World!"/>
-</RelativeLayout>
+        android:layout_gravity="end|center"
+        android:layout_marginEnd="10dp"
+        android:background="@drawable/take_picture_button_bg"/>
+
+</FrameLayout>
