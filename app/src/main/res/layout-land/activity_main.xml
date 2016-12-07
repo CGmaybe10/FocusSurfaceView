@@ -11,8 +11,9 @@
         android:layout_height="match_parent"
         android:background="@android:color/transparent"
         android:visibility="visible"
-        app:focus_crop_height="300dp"
-        app:focus_crop_width="225dp"
+        app:focus_crop_height="267dp"
+        app:focus_crop_width="200dp"
+        app:focus_frame_can_change="true"
         app:focus_frame_color="@android:color/holo_green_dark"
         app:focus_frame_stroke_weight="1dp"
         app:focus_guide_color="@android:color/holo_green_dark"
@@ -22,8 +23,8 @@
         app:focus_handle_show_mode="not_show"
         app:focus_handle_size="14dp"
         app:focus_min_frame_size="50dp"
-        app:focus_mode="ratio_3_4"
-        app:focus_overlay_color="#33000000"
+        app:focus_mode="circle"
+        app:focus_overlay_color="#66000000"
         app:focus_touch_padding="8dp"/>
 
     <Button

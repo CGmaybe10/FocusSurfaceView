@@ -8,6 +8,9 @@ import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Path;
 import android.graphics.PointF;
+import android.graphics.PorterDuff;
+import android.graphics.PorterDuffXfermode;
+import android.graphics.Rect;
 import android.graphics.RectF;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
@@ -1265,10 +1268,10 @@ public class FocusSurfaceView extends SurfaceView {
      */
     public Bitmap getPicture(byte[] data) {
         //原始照片
-        Bitmap bitmap = BitmapFactory.decodeByteArray(data, 0, data.length);
+        Bitmap originBitmap = BitmapFactory.decodeByteArray(data, 0, data.length);
         //原始照片的宽高
-        float picWidth = bitmap.getWidth();
-        float picHeight = bitmap.getHeight();
+        float picWidth = originBitmap.getWidth();
+        float picHeight = originBitmap.getHeight();
 
         //预览界面的宽高
         float preWidth = getWidth();
@@ -1290,7 +1293,39 @@ public class FocusSurfaceView extends SurfaceView {
         int cropWidth = (int) (frameWidth * preRW);
         int cropHeight = (int) (frameHeight * preRH);
 
-        return Bitmap.createBitmap(bitmap, cropLeft, cropTop, cropWidth, cropHeight);
+        Bitmap cropBitmap = Bitmap.createBitmap(originBitmap, cropLeft, cropTop, cropWidth, cropHeight);
+        originBitmap.recycle();
+
+        if (mCropMode == CropMode.CIRCLE) {
+            cropBitmap = getCircularBitmap(cropBitmap);
+        }
+        return cropBitmap;
+    }
+
+    /**
+     * 获取圆形图片
+     */
+    public Bitmap getCircularBitmap(Bitmap square) {
+        if (square == null) return null;
+        Bitmap output = Bitmap.createBitmap(square.getWidth(), square.getHeight(),
+                Bitmap.Config.ARGB_8888);
+
+        final Rect rect = new Rect(0, 0, square.getWidth(), square.getHeight());
+        Canvas canvas = new Canvas(output);
+
+        int halfWidth = square.getWidth() / 2;
+        int halfHeight = square.getHeight() / 2;
+
+        final Paint paint = new Paint();
+        paint.setAntiAlias(true);
+        paint.setFilterBitmap(true);
+
+        canvas.drawCircle(halfWidth, halfHeight, Math.min(halfWidth, halfHeight), paint);
+        paint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.SRC_IN));
+        canvas.drawBitmap(square, rect, rect, paint);
+
+        square.recycle();
+        return output;
     }
 
     private int dip2px(Context context, float dipValue) {
