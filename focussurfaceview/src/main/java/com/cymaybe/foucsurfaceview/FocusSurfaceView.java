@@ -7,7 +7,6 @@ import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Path;
-import android.graphics.Point;
 import android.graphics.PointF;
 import android.graphics.RectF;
 import android.graphics.drawable.Drawable;
@@ -1261,23 +1260,15 @@ public class FocusSurfaceView extends SurfaceView {
     /**
      * 获取照片
      *
-     * @param data        从camera返回的数据
-     * @param pictureSize 原始照片的大小
-     * @return
+     * @param data 从camera返回的数据
+     * @return 裁剪后的bitmap
      */
-    public Bitmap getPicture(byte[] data, Point pictureSize) {
-        //设置原始照片
+    public Bitmap getPicture(byte[] data) {
+        //原始照片
         Bitmap bitmap = BitmapFactory.decodeByteArray(data, 0, data.length);
-        //裁剪框的位置和宽高
-        RectF frameRect = getFrameRect();
-        float frameLeft = frameRect.left;
-        float frameTop = frameRect.top;
-        float frameWidth = frameRect.width();
-        float frameHeight = frameRect.height();
-
-        //照片的宽高
-        float picWidth = pictureSize.x;
-        float picHeight = pictureSize.y;
+        //原始照片的宽高
+        float picWidth = bitmap.getWidth();
+        float picHeight = bitmap.getHeight();
 
         //预览界面的宽高
         float preWidth = getWidth();
@@ -1286,6 +1277,13 @@ public class FocusSurfaceView extends SurfaceView {
         //预览界面和照片的比例
         float preRW = picWidth / preWidth;
         float preRH = picHeight / preHeight;
+
+        //裁剪框的位置和宽高
+        RectF frameRect = getFrameRect();
+        float frameLeft = frameRect.left;
+        float frameTop = frameRect.top;
+        float frameWidth = frameRect.width();
+        float frameHeight = frameRect.height();
 
         int cropLeft = (int) (frameLeft * preRW);
         int cropTop = (int) (frameTop * preRH);

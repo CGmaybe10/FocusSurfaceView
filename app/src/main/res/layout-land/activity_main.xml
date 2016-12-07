@@ -30,8 +30,8 @@
         android:id="@+id/take_bt"
         android:layout_width="70dp"
         android:layout_height="70dp"
-        android:layout_gravity="bottom|center"
-        android:layout_marginBottom="10dp"
+        android:layout_gravity="end|center"
+        android:layout_marginEnd="10dp"
         android:background="@drawable/take_picture_button_bg"/>
 
 </FrameLayout>

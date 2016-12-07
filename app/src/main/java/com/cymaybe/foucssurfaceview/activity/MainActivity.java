@@ -1,28 +1,32 @@
-package com.cymaybe.foucssurfaceview;
+package com.cymaybe.foucssurfaceview.activity;
 
 import android.content.Context;
-import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
-import android.graphics.Point;
+import android.graphics.BitmapFactory;
 import android.hardware.Camera;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.OrientationEventListener;
 import android.view.Surface;
 import android.view.SurfaceHolder;
 import android.view.View;
 import android.widget.Button;
 
+import com.cymaybe.foucssurfaceview.R;
+import com.cymaybe.foucssurfaceview.fragment.PictureFragment;
 import com.cymaybe.foucsurfaceview.FocusSurfaceView;
 
-import java.util.List;
+import static android.Manifest.permission.CAMERA;
+import static com.cymaybe.foucssurfaceview.fragment.PictureFragment.CROP_PICTURE;
+import static com.cymaybe.foucssurfaceview.fragment.PictureFragment.ORIGIN_PICTURE;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener, SurfaceHolder.Callback {
     private static final String TAG = "moubiao";
-    public static final String TAKE_PICTURE = "picture";
 
     private FocusSurfaceView previewSFV;
     private Button mTakeBT;
@@ -66,13 +70,40 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     private void initCamera() {
-        try {
-            mCamera = android.hardware.Camera.open(0);//1:采集指纹的摄像头. 0:拍照的摄像头.
-            mCamera.setPreviewDisplay(mHolder);
-        } catch (Exception e) {
-            Snackbar.make(mTakeBT, "camera open failed!", Snackbar.LENGTH_SHORT).show();
-            finish();
-            e.printStackTrace();
+        if (checkPermission()) {
+            try {
+                mCamera = android.hardware.Camera.open(0);//1:采集指纹的摄像头. 0:拍照的摄像头.
+                mCamera.setPreviewDisplay(mHolder);
+            } catch (Exception e) {
+                Snackbar.make(mTakeBT, "camera open failed!", Snackbar.LENGTH_SHORT).show();
+                finish();
+                e.printStackTrace();
+            }
+        } else {
+            requestPermission();
+        }
+    }
+
+    private boolean checkPermission() {
+        return ContextCompat.checkSelfPermission(getApplicationContext(), CAMERA) == PackageManager.PERMISSION_GRANTED;
+    }
+
+    private void requestPermission() {
+        ActivityCompat.requestPermissions(this, new String[]{CAMERA}, 10000);
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {
+        switch (requestCode) {
+            case 10000:
+                if (grantResults.length > 0) {
+                    if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                        initCamera();
+                        setCameraParams();
+                    }
+                }
+
+                break;
         }
     }
 
@@ -98,28 +129,22 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 parameters.setRotation(180);
             }
 
-            //临时解决图像方向问题
-            mCamera.setDisplayOrientation(180);
-            parameters.setRotation(180);
-            parameters.setPictureSize(480, 270);//192 144  160 120 240 180 264 198 320 240
-            parameters.setPreviewSize(480, 270);
-            List<Camera.Size> supportedPreviewSizes = parameters.getSupportedPreviewSizes();
-            List<Camera.Size> sizes = parameters.getSupportedPictureSizes();
-            if (false) {
-                for (Camera.Size pre : supportedPreviewSizes) {
-                    Log.d(TAG, "setCameraParams: preview width = " + pre.width + " height = " + pre.height);
-                }
-
-                for (Camera.Size pic : sizes) {
-                    Log.d(TAG, "setCameraParams: pic width = " + pic.width + " height = " + pic.height);
-                }
-            }
-
+            parameters.setPictureSize(1280, 720);
+            parameters.setPreviewSize(1280, 720);
             mCamera.setParameters(parameters);
             mCamera.startPreview();
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    @Override
+    public void onWindowFocusChanged(boolean hasFocus) {
+        View decorView = getWindow().getDecorView();
+        decorView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+                | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+                | View.SYSTEM_UI_FLAG_FULLSCREEN
+                | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY);
     }
 
     /**
@@ -179,12 +204,17 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     }, null, null, new Camera.PictureCallback() {
                         @Override
                         public void onPictureTaken(byte[] data, Camera camera) {
-                            Camera.Size picSize = mCamera.getParameters().getPictureSize();
-                            Point pic = new Point(picSize.width, picSize.height);
-                            Bitmap bitmap = previewSFV.getPicture(data, pic);
-                            Intent intent = new Intent(MainActivity.this, PreviewPictureActivity.class);
-                            intent.putExtra(TAKE_PICTURE, bitmap);
-                            startActivity(intent);
+                            Bitmap originBitmap = BitmapFactory.decodeByteArray(data, 0, data.length);
+                            Bitmap cropBitmap = previewSFV.getPicture(data);
+                            PictureFragment pictureFragment = new PictureFragment();
+                            Bundle bundle = new Bundle();
+                            bundle.putParcelable(ORIGIN_PICTURE, originBitmap);
+                            bundle.putParcelable(CROP_PICTURE, cropBitmap);
+                            pictureFragment.setArguments(bundle);
+                            pictureFragment.show(getFragmentManager(), null);
+
+                            focus = false;
+                            mCamera.startPreview();
                         }
                     });
                 }
