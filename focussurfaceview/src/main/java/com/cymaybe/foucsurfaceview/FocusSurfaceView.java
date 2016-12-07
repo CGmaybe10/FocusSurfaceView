@@ -207,9 +207,10 @@ public class FocusSurfaceView extends SurfaceView {
         float top = (mBoundaryHeight - mCropHeight) / 2;
         float right = left + mCropWidth;
         float bottom = top + mCropHeight;
-        mFrameRect = new RectF(left, top, right, bottom);
-        mIsInitialized = true;
-        invalidate();
+        if (mFrameRect == null) {
+            mFrameRect = new RectF(left, top, right, bottom);
+            mIsInitialized = true;
+        }
     }
 
     @Override
