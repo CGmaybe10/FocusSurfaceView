@@ -29,7 +29,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private static final String TAG = "moubiao";
 
     private FocusSurfaceView previewSFV;
-    private Button mTakeBT;
+    private Button mTakeBT, mThreeFourBT, mFourThreeBT, mNineSixteenBT, mSixteenNineBT, mFitImgBT, mCircleBT, mFreeBT, mSquareBT,
+            mCircleSquareBT, mCustomBT;
 
     private Camera mCamera;
     private SurfaceHolder mHolder;
@@ -57,10 +58,30 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         mHolder.setType(SurfaceHolder.SURFACE_TYPE_PUSH_BUFFERS);
 
         mTakeBT = (Button) findViewById(R.id.take_bt);
+        mThreeFourBT = (Button) findViewById(R.id.three_four_bt);
+        mFourThreeBT = (Button) findViewById(R.id.four_three_bt);
+        mNineSixteenBT = (Button) findViewById(R.id.nine_sixteen_bt);
+        mSixteenNineBT = (Button) findViewById(R.id.sixteen_nine_bt);
+        mFitImgBT = (Button) findViewById(R.id.fit_image_bt);
+        mCircleBT = (Button) findViewById(R.id.circle_bt);
+        mFreeBT = (Button) findViewById(R.id.free_bt);
+        mSquareBT = (Button) findViewById(R.id.square_bt);
+        mCircleSquareBT = (Button) findViewById(R.id.circle_square_bt);
+        mCustomBT = (Button) findViewById(R.id.custom_bt);
     }
 
     private void setListener() {
         mTakeBT.setOnClickListener(this);
+        mThreeFourBT.setOnClickListener(this);
+        mFourThreeBT.setOnClickListener(this);
+        mNineSixteenBT.setOnClickListener(this);
+        mSixteenNineBT.setOnClickListener(this);
+        mFitImgBT.setOnClickListener(this);
+        mCircleBT.setOnClickListener(this);
+        mFreeBT.setOnClickListener(this);
+        mSquareBT.setOnClickListener(this);
+        mCircleSquareBT.setOnClickListener(this);
+        mCustomBT.setOnClickListener(this);
     }
 
     @Override
@@ -181,6 +202,36 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 if (!focus) {
                     takePicture();
                 }
+                break;
+            case R.id.three_four_bt:
+                previewSFV.setCropMode(FocusSurfaceView.CropMode.RATIO_3_4);
+                break;
+            case R.id.four_three_bt:
+                previewSFV.setCropMode(FocusSurfaceView.CropMode.RATIO_4_3);
+                break;
+            case R.id.nine_sixteen_bt:
+                previewSFV.setCropMode(FocusSurfaceView.CropMode.RATIO_9_16);
+                break;
+            case R.id.sixteen_nine_bt:
+                previewSFV.setCropMode(FocusSurfaceView.CropMode.RATIO_16_9);
+                break;
+            case R.id.fit_image_bt:
+                previewSFV.setCropMode(FocusSurfaceView.CropMode.FIT_IMAGE);
+                break;
+            case R.id.circle_bt:
+                previewSFV.setCropMode(FocusSurfaceView.CropMode.CIRCLE);
+                break;
+            case R.id.free_bt:
+                previewSFV.setCropMode(FocusSurfaceView.CropMode.FREE);
+                break;
+            case R.id.square_bt:
+                previewSFV.setCropMode(FocusSurfaceView.CropMode.SQUARE);
+                break;
+            case R.id.circle_square_bt:
+                previewSFV.setCropMode(FocusSurfaceView.CropMode.CIRCLE_SQUARE);
+                break;
+            case R.id.custom_bt:
+                previewSFV.setCropMode(FocusSurfaceView.CropMode.CUSTOM);
                 break;
             default:
                 break;

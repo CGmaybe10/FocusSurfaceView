@@ -27,6 +27,18 @@
         app:focus_overlay_color="#66000000"
         app:focus_touch_padding="8dp"/>
 
+    <ScrollView
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_gravity="end|center"
+        android:layout_marginEnd="90dp"
+        android:background="#99000000"
+        android:scrollbars="none">
+
+        <include layout="@layout/crop_mode_layout"/>
+
+    </ScrollView>
+
     <Button
         android:id="@+id/take_bt"
         android:layout_width="70dp"

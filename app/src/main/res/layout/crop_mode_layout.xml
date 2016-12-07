@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:orientation="horizontal">
+
+    <Button
+        android:id="@+id/three_four_bt"
+        style="@style/CropModeButtonStyle"
+        android:text="3:4"/>
+
+    <Button
+        android:id="@+id/four_three_bt"
+        style="@style/CropModeButtonStyle"
+        android:text="4:3"/>
+
+    <Button
+        android:id="@+id/nine_sixteen_bt"
+        style="@style/CropModeButtonStyle"
+        android:text="9:16"/>
+
+    <Button
+        android:id="@+id/sixteen_nine_bt"
+        style="@style/CropModeButtonStyle"
+        android:text="16:9"/>
+
+    <Button
+        android:id="@+id/fit_image_bt"
+        style="@style/CropModeButtonStyle"
+        android:text="fit img"/>
+
+    <Button
+        android:id="@+id/circle_bt"
+        style="@style/CropModeButtonStyle"
+        android:text="circle"/>
+
+    <Button
+        android:id="@+id/free_bt"
+        style="@style/CropModeButtonStyle"
+        android:text="free"/>
+
+    <Button
+        android:id="@+id/square_bt"
+        style="@style/CropModeButtonStyle"
+        android:text="square"/>
+
+    <Button
+        android:id="@+id/circle_square_bt"
+        style="@style/CropModeButtonStyle"
+        android:text="cirSqu"/>
+
+    <Button
+        android:id="@+id/custom_bt"
+        style="@style/CropModeButtonStyle"
+        android:text="custom"/>
+</LinearLayout>
