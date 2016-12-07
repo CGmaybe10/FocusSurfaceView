@@ -1294,7 +1294,6 @@ public class FocusSurfaceView extends SurfaceView {
         int cropHeight = (int) (frameHeight * preRH);
 
         Bitmap cropBitmap = Bitmap.createBitmap(originBitmap, cropLeft, cropTop, cropWidth, cropHeight);
-        originBitmap.recycle();
 
         if (mCropMode == CropMode.CIRCLE) {
             cropBitmap = getCircularBitmap(cropBitmap);
@@ -1307,8 +1306,7 @@ public class FocusSurfaceView extends SurfaceView {
      */
     public Bitmap getCircularBitmap(Bitmap square) {
         if (square == null) return null;
-        Bitmap output = Bitmap.createBitmap(square.getWidth(), square.getHeight(),
-                Bitmap.Config.ARGB_8888);
+        Bitmap output = Bitmap.createBitmap(square.getWidth(), square.getHeight(), Bitmap.Config.ARGB_8888);
 
         final Rect rect = new Rect(0, 0, square.getWidth(), square.getHeight());
         Canvas canvas = new Canvas(output);
@@ -1323,8 +1321,6 @@ public class FocusSurfaceView extends SurfaceView {
         canvas.drawCircle(halfWidth, halfHeight, Math.min(halfWidth, halfHeight), paint);
         paint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.SRC_IN));
         canvas.drawBitmap(square, rect, rect, paint);
-
-        square.recycle();
         return output;
     }
 
