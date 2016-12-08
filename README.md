@@ -4,3 +4,7 @@
 
 Supported on API Level 10 and above. </br>
 
+![](https://github.com/CGmaybe10/FocusSurfaceView/blob/master/screenshots/circle.png)
+![](https://github.com/CGmaybe10/FocusSurfaceView/blob/master/screenshots/circle_pre.png)
+![](https://github.com/CGmaybe10/FocusSurfaceView/blob/master/screenshots/ratio_3_4.png)
+![](https://github.com/CGmaybe10/FocusSurfaceView/blob/master/screenshots/ratio_3_4_pre.png)
