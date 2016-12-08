@@ -66,4 +66,4 @@ mCamera.autoFocus(new Camera.AutoFocusCallback() {
                 }
             }
         });
-'''
+```
