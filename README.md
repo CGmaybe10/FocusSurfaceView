@@ -1,10 +1,8 @@
 # FocusSurfaceView
-该库很大很大很大部分参考IsseiAoki的SimpleCropView https://github.com/IsseiAoki/SimpleCropView </br> 
+该库大部分参考IsseiAoki的SimpleCropView https://github.com/IsseiAoki/SimpleCropView </br> 
 实现了在相机的预览界面指定一个区域的大小，形状和位置，只拍摄该指定区域里的图像 </br>
+支持 API Level 10 and above. </br>
 ![](https://github.com/CGmaybe10/FocusSurfaceView/blob/master/screenshots/demo.gif)</br>
-
-Supported on API Level 10 and above. </br>
-
 ![](https://github.com/CGmaybe10/FocusSurfaceView/blob/master/screenshots/circle.png)
 ![](https://github.com/CGmaybe10/FocusSurfaceView/blob/master/screenshots/circle_pre.png)
 ![](https://github.com/CGmaybe10/FocusSurfaceView/blob/master/screenshots/square.png)
