@@ -29,12 +29,10 @@ import com.cymaybe.foucsurfaceview.animation.ValueAnimatorV8;
 
 /**
  * Created by moubiao on 2016/11/2.
- * 裁剪图片的view
+ * 可以指定拍摄区域的SurfaceView
  */
 
 public class FocusSurfaceView extends SurfaceView {
-    private final String TAG = "moubiao";
-
     private static final int HANDLE_SIZE_IN_DP = 14;
     private static final int MIN_FRAME_SIZE_IN_DP = 50;
     private static final int FRAME_STROKE_WEIGHT_IN_DP = 1;
@@ -63,7 +61,6 @@ public class FocusSurfaceView extends SurfaceView {
     private SimpleValueAnimator mAnimator = null;
     private final Interpolator DEFAULT_INTERPOLATOR = new DecelerateInterpolator();
     private Interpolator mInterpolator = DEFAULT_INTERPOLATOR;
-    // Instance variables for customizable attributes //////////////////////////////////////////////
 
     private TouchArea mTouchArea = TouchArea.OUT_OF_BOUNDS;
 
@@ -116,13 +113,9 @@ public class FocusSurfaceView extends SurfaceView {
         mHandleColor = WHITE;
         mGuideColor = TRANSLUCENT_WHITE;
 
-        // handle Styleable
         handleStyleable(context, attrs, defStyle, density);
     }
 
-    /**
-     * 处理各种属性
-     */
     private void handleStyleable(Context context, AttributeSet attrs, int defStyle, float mDensity) {
         TypedArray ta = context.getTheme().obtainStyledAttributes(attrs, R.styleable.FocusSurfaceView, defStyle, 0);
         mCropMode = CropMode.SQUARE;
@@ -196,7 +189,7 @@ public class FocusSurfaceView extends SurfaceView {
     }
 
     /**
-     * 计算裁剪框的位置
+     * 计算裁剪框的位置和活动区域
      */
     private void setupLayout() {
         if (mBoundaryWidth == 0 || mBoundaryHeight == 0) {
@@ -513,8 +506,6 @@ public class FocusSurfaceView extends SurfaceView {
         return sq(mHandleSize + mTouchPadding) >= d;
     }
 
-    // Adjust frame ////////////////////////////////////////////////////////////////////////////////
-
     private void moveFrame(float x, float y) {
         mFrameRect.left += x;
         mFrameRect.right += x;
@@ -711,8 +702,6 @@ public class FocusSurfaceView extends SurfaceView {
         }
     }
 
-    // Frame position correction ///////////////////////////////////////////////////////////////////
-
     private void checkScaleBounds() {
         float lDiff = mFrameRect.left - mBoundaryRect.left;
         float rDiff = mFrameRect.right - mBoundaryRect.right;
@@ -771,8 +760,6 @@ public class FocusSurfaceView extends SurfaceView {
     private boolean isHeightTooSmall() {
         return getFrameHeight() < mMinFrameSize;
     }
-
-    // Frame aspect ratio correction ///////////////////////////////////////////////////////////////
 
     private void recalculateFrameRect(int durationMillis) {
         if (mBoundaryRect == null) return;
@@ -912,8 +899,6 @@ public class FocusSurfaceView extends SurfaceView {
         }
     }
 
-    // Utility /////////////////////////////////////////////////////////////////////////////////////
-
     private float getDensity() {
         DisplayMetrics displayMetrics = new DisplayMetrics();
         ((WindowManager) getContext().getSystemService(Context.WINDOW_SERVICE)).getDefaultDisplay()
@@ -929,52 +914,6 @@ public class FocusSurfaceView extends SurfaceView {
         if (val < min || val > max) return defaultVal;
         return val;
     }
-
-    /**
-     * 旋转后的宽度
-     *
-     * @param angle 旋转的角度
-     * @return 旋转后的宽度
-     */
-    private float getRotatedWidth(float angle) {
-        return getRotatedWidth(angle, mBoundaryWidth, mBoundaryHeight);
-    }
-
-    /**
-     * 旋转后的宽度
-     *
-     * @param angle  旋转的角度
-     * @param width  view的宽
-     * @param height view的高
-     * @return 旋转后的宽度
-     */
-    private float getRotatedWidth(float angle, float width, float height) {
-        return angle % 180 == 0 ? width : height;
-    }
-
-    /**
-     * 旋转后的高度
-     *
-     * @param angle 旋转的角度
-     * @return 旋转后的高度
-     */
-    private float getRotatedHeight(float angle) {
-        return getRotatedHeight(angle, mBoundaryWidth, mBoundaryHeight);
-    }
-
-    /**
-     * 旋转后的高度
-     *
-     * @param angle  旋转的角度
-     * @param width  view的宽
-     * @param height view的高
-     * @return 旋转后的宽度
-     */
-    private float getRotatedHeight(float angle, float width, float height) {
-        return angle % 180 == 0 ? height : width;
-    }
-
-    // Animation ///////////////////////////////////////////////////////////////////////////////////
 
     private SimpleValueAnimator getAnimator() {
         setupAnimatorIfNeeded();
@@ -1108,7 +1047,7 @@ public class FocusSurfaceView extends SurfaceView {
     }
 
     /**
-     * 设置 guideline 的现实模式
+     * 设置 guideline 的显示模式
      * (SHOW_ALWAYS/NOT_SHOW/SHOW_ON_TOUCH)
      *
      * @param mode guideline show mode
