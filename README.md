@@ -17,7 +17,7 @@ allprojects {
 		}
 	}
 dependencies {
-	        compile 'com.github.CGmaybe10:FocusSurfaceView:v1.0.0'
+	        compile 'com.github.CGmaybe10:FocusSurfaceView:v1.0.1'
 	}
 ```
 ```xml       
